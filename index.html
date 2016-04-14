@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="jquery.js"></script>
+<script src="/core/codemirror-4.12/lib/codemirror.js"></script>
+<link rel="stylesheet" href="/core/codemirror-4.12/lib/codemirror.css">
+
+<script src="/core/codemirror-4.12/mode/javascript/javascript.js"></script>
+
+<script src="leek.js"></script>
+<script>
+$(document).ready(function(){
+var myCodeMirror = CodeMirror(document.body);
+  $("#runCode").click(function(){
+     $("#Console").append("<li>" + (run($("#leekcode").val())) + "</li>");
+
+});
+
+});
+</script>
+</head>
+<body>
+<form>
+<textarea id="leekcode"></textarea>
+
+</form>
+<button id="runCode">Run Leek</button>
+<ul id="Console"></ul>
+</body>
+</html>
