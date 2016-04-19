@@ -10,9 +10,8 @@
 <script src="leek.js"></script>
 <script>
 $(document).ready(function(){
-var myCodeMirror = CodeMirror(document.body);
   $("#runCode").click(function(){
-     $("#Console").append("<li>" + (run($("#leekcode").val())) + "</li>");
+     $("#Console").append("<li>" + (Leek.run($("#leekcode").val())) + "</li>");
 
 });
 
