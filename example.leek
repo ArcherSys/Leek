@@ -1,0 +1,7 @@
+do(
+define(msg,"Hello World"),
+wait(print(msg),2000),
+print("hello")
+# Works
+
+)

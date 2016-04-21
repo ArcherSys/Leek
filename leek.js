@@ -20,10 +20,12 @@ Leek.parseExpression = function(program) {
 }
 
  Leek.skipSpace = function(string) {
-  var first = string.search(/\S/);
-  if (first == -1) return "";
+ var skippable = string.match(/^(\s|#.*)*/);
+  return string.slice(skippable[0].length);
+
   return string.slice(first);
-}
+};
+
 Leek.parseApply = function(expr, program) {
   program = Leek.skipSpace(program);
   if (program[0] != "(")
@@ -117,6 +119,13 @@ Leek.specialForms["define"] = function(args, env) {
   env[args[0].name] = value;
   return value;
 };
+Leek.specialForms["wait"] = function(args,env){
+   window.setTimeout(function(){
+	   return Leek.evaluate(args[0],env);
+	 
+	   },parseInt(args[1]));
+	   
+}
 Leek.topEnv["."] = function(a,b){
 return topEnv[a][b];
 };
@@ -140,10 +149,20 @@ Leek.topEnv["print"] = function(value) {
 Leek.topEnv["len"] = function(value){
  return value.length;
 };
+
 Leek.topEnv["vignere"] = function(shift,value){
    var evalue =  Leek.getSymcryptE(shift,value);
    console.log(evalue);
    return evalue;
+};
+Leek.getAsText =function(readFile) {
+
+  var reader = new FileReader();
+
+  // Read file into memory as UTF-16
+  return reader.readAsText(readFile, "UTF-16");
+
+  
 };
 Leek.topEnv["WCA"] = function(value,mode){
 
@@ -169,7 +188,31 @@ for(var i = 0; i < code1.length; i++){
   return code2;
   
 };
+Leek.topEnv["array"] = function() {
+  return Array.prototype.slice.call(arguments, 0);
+};
 
+Leek.topEnv["length"] = function(array) {
+  return array.length;
+};
+
+Leek.topEnv["element"] = function(array, i) {
+  return array[i];
+};
+Leek.specialForms["set"] = function(args, env) {
+  if (args.length != 2 || args[0].type != "word")
+    throw new SyntaxError("Bad use of set");
+  var varName = args[0].name;
+  var value = Leek.evaluate(args[1], env);
+
+  for (var scope = env; scope; scope = Object.getPrototypeOf(scope)) {
+    if (Object.prototype.hasOwnProperty.call(scope, varName)) {
+      scope[varName] = value;
+      return value;
+    }
+  }
+  throw new ReferenceError("Setting undefined variable " + varName);
+};
  Leek.run = function() {
   var env = Object.create(Leek.topEnv);
 try{

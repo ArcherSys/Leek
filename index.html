@@ -1,23 +1,23 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<title>Leek Language</title>
 <script src="jquery.js"></script>
-<script src="codemirror-5.14/lib/codemirror.js"></script>
-<link rel="stylesheet" href="codemirror-5.14/lib/codemirror.css">
-<script src="codemirror-5.14/addon/fold/foldgutter.js"></script>
+<script src="/core/codemirror-4.12/lib/codemirror.js"></script>
+<link rel="stylesheet" href="/core/codemirror-4.12/lib/codemirror.css">
 
-<script src="codemirror-5.14/mode/leek/leek.js"></script>
+<script src="/core/codemirror-4.12/mode/javascript/javascript.js"></script>
 
 <script src="leek.js"></script>
+<script type="text/leek" class="leek-script" src="example.leek"></script>
 <script>
+
 $(document).ready(function(){
-      var editor = CodeMirror(window.document.querySelector("#Console")
-, {
-    lineNumbers: true,
- 
-  });
-  $("#runCode").click(function(){
-     $("#Console").append("<li>" + (Leek.run(editor.getValue())) + "</li>");
+$.get( $(".leek-script").attr("src"), function( data ) {
+$("#Console").append("<li>" + Leek.run(data) + "</li>") ;
+});  
+$("#runCode").click(function(){
+     $("#Console").append("<li>" + (Leek.run($("#leekcode").val())) + "</li>");
 
 });
 
