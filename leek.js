@@ -78,10 +78,19 @@ Leek.specialForms["if"] = function(args, env) {
   if (args.length != 3)
     throw new SyntaxError("Bad number of args to if");
 
-  if (evaluate(args[0], env) !== false)
+  if (Leek.evaluate(args[0], env) !== false)
     return Leek.evaluate(args[1], env);
   else
     return Leek.evaluate(args[2], env);
+};
+Leek.specialForms["try"] = function(args,env){
+try{
+return Leek.evaluate(args[0],env);
+}catch(e){
+env["err"] = e;
+return Leek.evaluate(args[1],env);
+}
+return false;
 };
 Leek.specialForms["while"] = function(args, env) {
   if (args.length != 2)
@@ -108,7 +117,9 @@ Leek.specialForms["define"] = function(args, env) {
   env[args[0].name] = value;
   return value;
 };
-
+Leek.topEnv["."] = function(a,b){
+return topEnv[a][b];
+};
 ["+", "-", "*", "%","/", "==", "<", ">"].forEach(function(op) {
   Leek.topEnv[op] = new Function("a, b", "return a " + op + " b;");
 });
@@ -126,6 +137,9 @@ Leek.topEnv["print"] = function(value) {
   }
   return ev
   };
+Leek.topEnv["len"] = function(value){
+ return value.length;
+};
 Leek.topEnv["vignere"] = function(shift,value){
    var evalue =  Leek.getSymcryptE(shift,value);
    console.log(evalue);
@@ -158,7 +172,11 @@ for(var i = 0; i < code1.length; i++){
 
  Leek.run = function() {
   var env = Object.create(Leek.topEnv);
+try{
   var program = Array.prototype.slice
     .call(arguments, 0).join("\n");
-  return Leek.evaluate(Leek.parse(program), env);
+  return Leek.evaluate(Leek.parse(program), env);}
+catch(e){
+alert(e);
+}
 }
