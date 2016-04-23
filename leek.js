@@ -4,6 +4,10 @@ Leek.topEnv = Object.create(null);
 
 Leek.topEnv["true"] = true;
 Leek.topEnv["false"] = false;
+Leek.topEnv["OOP"] = {
+      type: "Aspect"
+};
+
 Leek.parseExpression = function(program) {
   program = Leek.skipSpace(program);
   var match, expr;
@@ -108,7 +112,11 @@ Leek.specialForms["while"] = function(args, env) {
 Leek.specialForms["do"] = function(args, env) {
   var value = false;
   args.forEach(function(arg) {
+  try{
     value = Leek.evaluate(arg, env);
+}catch(e){
+alert(e);
+}
   });
   return value;
 };
@@ -119,13 +127,17 @@ Leek.specialForms["define"] = function(args, env) {
   env[args[0].name] = value;
   return value;
 };
+Leek.sleep = function(milliseconds) { var start = new Date().getTime(); for (var i = 0; i < 1e7; i++) { if ((new Date().getTime() - start) > milliseconds){ break; } } };
+
 Leek.specialForms["wait"] = function(args,env){
-   window.setTimeout(function(){
-	   return Leek.evaluate(args[0],env);
+   Leek.sleep(args[1]*1000);
+	 return Leek.evaluate(args[0],env);
 	 
-	   },parseInt(args[1]));
-	   
-}
+	
+};
+ Leek.topEnv["vibrate"] = function(sec){
+window.navigator.vibrate(sec*1000);
+};
 Leek.topEnv["."] = function(a,b){
 return topEnv[a][b];
 };
