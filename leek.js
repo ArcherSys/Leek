@@ -8,6 +8,7 @@ Leek.topEnv["OOP"] = {
       type: "Aspect"
 };
 
+
 Leek.parseExpression = function(program) {
   program = Leek.skipSpace(program);
   var match, expr;
@@ -161,7 +162,9 @@ Leek.topEnv["print"] = function(value) {
 Leek.topEnv["len"] = function(value){
  return value.length;
 };
-
+Leek.topEnv["onGrid"] = function(){
+return window.navigator.onLine;
+};
 Leek.topEnv["vignere"] = function(shift,value){
    var evalue =  Leek.getSymcryptE(shift,value);
    console.log(evalue);
@@ -224,6 +227,9 @@ Leek.specialForms["set"] = function(args, env) {
     }
   }
   throw new ReferenceError("Setting undefined variable " + varName);
+}; 
+Leek.topEnv["kindof"] = function(val){
+   return typeof val;
 };
  Leek.run = function() {
   var env = Object.create(Leek.topEnv);
